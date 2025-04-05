@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { IgniterProvider } from '@igniter-js/core/client'
+import { Providers } from "./providers"
 
 import "./globals.css"
 
@@ -28,11 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased light`}
       >
-        <IgniterProvider>
-          {children}
-        </IgniterProvider>
+        <Providers>
+          <IgniterProvider>
+            {children}
+          </IgniterProvider>
+        </Providers>
       </body>
     </html>
   );

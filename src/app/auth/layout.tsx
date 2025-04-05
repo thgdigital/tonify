@@ -1,5 +1,4 @@
 import { api } from "@/igniter.client"
-import { redirect } from "next/navigation"
 
 export default async function Layout({
   children,
@@ -8,7 +7,7 @@ export default async function Layout({
 }) {
 const session = await api.auth.getSession.query()
 
-if(!session.error) return redirect('/dashboard')
+if(!session.error) return
 
 
   return (

@@ -2,6 +2,7 @@ import { TodoController } from "./features/todo";
 import { igniter } from "./igniter";
 import { createIgniterAppContext } from "./igniter.context";
 import { AuthController } from "./features/auth/controllers/auth.controller";
+import { InstanceController } from "./features/instance";
 
 /**
  * @description Initialize the Igniter Router with controllers and context
@@ -28,6 +29,7 @@ export const AppRouter = igniter.router({
   controllers: {
     // add your controllers here
     todos: TodoController,
-    auth: AuthController
+    auth: AuthController,
+    instance: InstanceController
   }
 })

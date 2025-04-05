@@ -12,7 +12,6 @@ export const createIgniterAppContext = () => {
     providers: {
       database: prisma,
       auth: auth,
-      authClient: authClient,
     }
   }
 }

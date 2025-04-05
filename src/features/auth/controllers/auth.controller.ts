@@ -38,6 +38,16 @@ export const AuthController = igniter.controller({
         const result = await context.auth.signOut();
         return response.success(result);
       }
-    })
+    }),
+    user: igniter.query({
+      path: "/user",
+      method: "GET",
+      use: [AuthFeatureProcedure()],
+      handler: async ({ request, response, context }) => {  
+        const result = await context.auth.user();
+        return response.success(result);
+      }
+    }),
+
   }
 });

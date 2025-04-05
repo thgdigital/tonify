@@ -25,6 +25,12 @@ export const AuthFeatureProcedure = igniter.procedure({
             headers: ctx.request.headers,
           });
           return session;
+         },
+         user: async () => {
+          const user = await ctx.context.providers.auth.api.getSession({
+            headers: ctx.request.headers,
+          });
+          return user?.user;
          }
       },
     };
