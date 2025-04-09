@@ -16,6 +16,8 @@ export interface Instance {
   instanceId: string  | null;
   /** Hash's hash property */
   hash: string  | null;
+  /** Hash's hash property */
+  status: string  | null;
   /** CreatedAt's createdAt property */
   createdAt: Date;
   /** UpdatedAt's updatedAt property */
@@ -35,6 +37,8 @@ export interface CreateInstanceDTO {
   instanceId: string  | null;
   /** Hash's hash property */
   hash: string  | null;
+  /** Hash's hash property */
+  status: string  | null;
   /** CreatedAt's createdAt property  */
   createdAt: Date;
   /** UpdatedAt's updatedAt property  */
@@ -55,6 +59,8 @@ export interface UpdateInstanceDTO {
   instanceId: string  | null;
   /** Hash's hash property */
   hash: string  | null;
+  /** Hash's hash property */
+  status: string  | null;
   /** CreatedAt's createdAt property  */
   createdAt?: Date;
   /** UpdatedAt's updatedAt property  */
@@ -75,4 +81,8 @@ export interface InstanceQueryParams {
   sortOrder?: 'asc' | 'desc';
   /** Search term for filtering */
   search?: string;
+  /** UserId's userId property  */
+  userId?: string;
+  /** InstanceId's instanceId property */
+  instanceId?: string  | null;
 }

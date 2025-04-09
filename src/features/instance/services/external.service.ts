@@ -1,3 +1,4 @@
+import { api } from "@/igniter.client";
 
 class ExternalService {
   private baseUrl: string;
@@ -25,13 +26,57 @@ class ExternalService {
       body: JSON.stringify(data),
     });
 
-    console.log('Response from external service:', response.headers);
     if (!response.ok) {
       console.error('Error making external request:', response.statusText);
       throw new Error('Failed to create instance');
     }
 
     return await response.json();
+  }
+
+  public async deleteInstance(name: string): Promise<any> {
+    this.validateConfig();
+    try {
+      // Verifica se o nome da instância não está vazio ou nulo
+      if (!name) {
+        throw new Error('Nome da instância não pode ser vazio ou nulo');
+      }
+
+      const response = await fetch(`${this.baseUrl}/instance/delete/${name}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': this.apiKey,
+        }
+      });
+    return await response.json();
+    } catch (error) {
+      console.error('Error during external service call:', error);
+      throw error;
+    }
+  }
+  public async qrCodeInstance(name: string): Promise<any> {
+    this.validateConfig();
+    try {
+      // Verifica se o nome da instância não está vazio ou nulo
+      if (!name) {
+        throw new Error('Nome da instância não pode ser vazio ou nulo');
+      }
+
+      const response = await fetch(`${this.baseUrl}/instance/connect/${name}`, {
+        method: 'GET',
+        headers: {
+          'apikey': this.apiKey,
+        }
+      });
+      if (!response.ok) { 
+        console.error('Error making external request:', response.statusText);
+        throw new Error('Failed to create instance');
+      }
+      return await response.json();
+    } catch (error) { 
+      console.error('Error during external service call:', error);
+      throw error;
+    }
   }
 }
 

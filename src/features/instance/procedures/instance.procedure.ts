@@ -41,6 +41,7 @@ export const InstanceFeatureProcedure = igniter.procedure({
               userId: input.userId,
               instanceId: input.instanceId,
               hash: input.hash,
+              status: input.status,
               updatedAt: input.updatedAt,
             },
             include: {
@@ -66,10 +67,14 @@ export const InstanceFeatureProcedure = igniter.procedure({
             include: { user: true },
           });
         },
-        delete: async (params: { id: string }): Promise<{ id: string }> => {
-          await context.providers.database.instance.delete({
-            where: { id: params.id }
+        delete: async (params: { id: string, userId: string }): Promise<{ id: string }> => {
+          const result =  await context.providers.database.instance.delete({
+            where: {
+               id: params.id, 
+               userId: params.userId
+              }
           });
+     
           return { id: params.id };
         }
       }

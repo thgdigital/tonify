@@ -1,6 +1,7 @@
 import { useFormWithZod } from "@/hooks/use-form-with-zod";
 import { z } from "zod";
 import { api } from "@/igniter.client";
+import { useQueryClient } from "@/igniter.client";
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -8,8 +9,20 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ZodErrors } from "@/components/ui/ZodErros";
+import { CardInstance } from "./card-instance";
+import { Toaster, toast } from 'sonner'
+import { LoadingInstance } from "./loading-instance";
+import { useEffect } from "react";
 
-export function FormInstance({className, ...props}: React.ComponentProps<"div">){
+export function FormInstance({className, ...props}: React.ComponentProps<"div">) {
+    const queryClient = useQueryClient()
+    const createInstance = api.instance.create.useMutation()
+    const getInstance = api.instance.getUserId.useQuery(
+        {
+            refetchOnWindowFocus: false,
+        }
+
+    )
 
     const form = useFormWithZod({
         schema: z.object({  
@@ -19,23 +32,45 @@ export function FormInstance({className, ...props}: React.ComponentProps<"div">)
         }),
 
         onSubmit: async (data) => {
-            console.log("Form submitted with data: ", data);
-            const response = await api.instance.create.mutate({
+            const response = await createInstance.mutate({
                 body: {
                     name: data.name,
-                     // Ou o valor apropriado
                 }
             });
             
-            // console.log("Instância criada:", response.data);
+            if(response.error) {
+                toast.error("Erro ao criar instância")
+            }
+
+            form.reset();
+            queryClient.invalidate("instance.getUserId");        
         }
     });
 
-    
+
+    if (getInstance.loading) {
+        return <LoadingInstance/>
+    }
+    if (getInstance.error) {
+       toast.error("Erro ao carregar instâncias")
+    }
+
+    if (getInstance.data && getInstance.data.length > 0) {
+       return (
+        <div>
+          {getInstance.data.map(instance => (
+            <CardInstance key={instance.id} instance={instance} />
+          ))}
+        </div>
+       );
+    }
+ 
 
   return (
+    <>
+    <Toaster richColors />
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-    <Card className="overflow-hidden">
+    <Card className="w-[350px]">
       <CardContent className="grid p-0 md:grid-cols-1">
         
         <form className="p-6 md:p-8" onSubmit={form.onSubmit}>
@@ -52,8 +87,8 @@ export function FormInstance({className, ...props}: React.ComponentProps<"div">)
               />
             
             </div>
-            <Button type="submit" className="w-full">
-              Gerar Instância
+            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+              {createInstance.loading ? "Gerando Instância..." : "Gerar Instância"}
             </Button>
             
           </div>
@@ -63,5 +98,6 @@ export function FormInstance({className, ...props}: React.ComponentProps<"div">)
     </Card>
 
   </div>
+  </>
   );
 }

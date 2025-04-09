@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext", "ES2020"],
+    "target": "ES2020",                         // Mais compatível com async/await e libs modernas
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    //oque isso?
+    "esModuleInterop": true,                    // Importações compatíveis com CommonJS (ex: socket.io-client)
+    "module": "Node16",                         // Compatível com 'moduleResolution: node16'
+    "moduleResolution": "node16",                 // 'node16' exige declarações específicas em pacotes
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -20,7 +21,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
