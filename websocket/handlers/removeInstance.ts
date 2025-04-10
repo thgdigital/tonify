@@ -12,7 +12,6 @@ export async function handleRemoveInstance(
 ) {
 
   console.log(`[${event.instance}] 🗑️ Evento remove.instance recebido`);
-  console.log(event)
   try {
     const response = await instanceService.deleteInstance(event);
     if (response.success) {
