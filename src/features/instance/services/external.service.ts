@@ -4,10 +4,14 @@ import { PrismaClient } from "@prisma/client";
 class ExternalService {
   private baseUrl: string;
   private apiKey: string;
+  private webhookUrl: string;
+  private webhookEvents: string[];
 
   constructor() {
     this.baseUrl = process.env.EVOLUTION_BASE_URL || '';
     this.apiKey = process.env.EVOLUTION_API_KEY || '';
+    this.webhookUrl = process.env.WEBHOOK_URL || '';
+    this.webhookEvents = process.env.WEBHOOK_EVENT?.split(",") || [];
   }
 
   private validateConfig() {
@@ -16,7 +20,7 @@ class ExternalService {
     }
   }
 
-  public async createInstance(data: any): Promise<any> {
+  public async createInstance(name: string): Promise<any> {
     this.validateConfig();
     console.log(`Base URL: ${this.baseUrl}`);
     const response = await fetch(`${this.baseUrl}/instance/create`, {
@@ -25,7 +29,22 @@ class ExternalService {
         'Content-Type': 'application/json',
         'apikey': this.apiKey,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        instanceName: name,
+        qrcode: true,
+        integration: "WHATSAPP-BAILEYS",
+        webhook: {
+          url: this.webhookUrl,
+          byEvents: false,
+          base64: true,
+          events: ["MESSAGES_UPSERT"],
+        },
+        websocket: {
+          byEvents: false,
+          base64: true,
+          events: this.webhookEvents,
+        }
+      })
     });
 
     if (!response.ok) {

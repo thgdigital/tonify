@@ -65,29 +65,7 @@ export const InstanceController = igniter.controller({
         try {
 
           let  instanceName = uuidv4()
-          const externalData = await ExternalService.createInstance({
-            instanceName: instanceName,
-            qrcode: true,
-            integration: "WHATSAPP-BAILEYS",
-            // webhook: {
-            //   "url": "https://paineln8n.faixinhabot.cloud/webhook-test/c638b1e4-69f9-40a9-a1e3-6d86750fbdb3",
-            //   "byEvents": false,
-            //   "base64": true,
-            //   "events": ["MESSAGES_UPSERT"],
-            // },
-            websocket: { 
-              "byEvents": false,
-              "base64": true,
-              "events": [
-                "APPLICATION_STARTUP",
-                "QRCODE_UPDATED",
-                "REMOVE_INSTANCE",
-                "CONNECTION_UPDATE",
-                "LOGOUT_INSTANCE"
-              ],
-            }
-          });
-
+          const externalData = await ExternalService.createInstance(instanceName);
           let dto = { 
             name:  request.body.name,
             userId: session.user.id,
