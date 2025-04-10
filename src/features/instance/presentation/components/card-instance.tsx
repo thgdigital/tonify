@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/igniter.client";
 import { useQueryClient } from "@/igniter.client";
 import { Toaster, toast } from 'sonner'
-// import { InstanceSocketExample } from './instance-socket-example';
 
 import {
   Card,
@@ -31,6 +30,8 @@ import {
 import { ButtonStatus } from "./button-status";
 import { useEffect } from "react";
 import { DialogQR } from './dialog-qr';
+import { useInstanceSocket } from '@/hooks/useInstanceSocket'
+import { set } from 'zod';
 
 interface CardInstanceProps extends React.ComponentProps<"div"> {
   instance: Instance;
@@ -40,35 +41,22 @@ export function CardInstance({ className, instance, ...props }: CardInstanceProp
     const queryClient = useQueryClient()
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenQr, setIsOpenQR] = useState(false);
-
-
-//    useClientSocket?.on('messages.upsert', (event: Event) => {
-//     console.log(event)
-//    })
     
+
+    const { instanceStatus, messages, qrcode } = useInstanceSocket({
+        instanceId: instance.instanceId || "",
+    });
+
+
     useEffect(() => {
-        openSocket()
-        
-        return () => {
-            closeSocket()
-          };
-    })
-    async function openSocket() {
-        await api.instance.openInSocket.query({
-            params: {
-                id: instance.id || ""
-            }
-        })
-    }
-
-
-    async function closeSocket() {
-        await api.instance.closeInSocket.query({
-            params: {
-                id: instance.id || ""
-            }
-        })
-    }
+     if(instanceStatus === "CONNECTED") {
+        setIsOpenQR(false);
+        setIsOpen(false);
+        queryClient.invalidate("instance.getUserId");
+     }
+        console.log(instanceStatus)
+      }, [instanceStatus, qrcode]);
+   
 
     function handleClick() {
         setIsOpen(true);
@@ -107,16 +95,17 @@ export function CardInstance({ className, instance, ...props }: CardInstanceProp
 
   return (
     <>
-  
-        <DialogQR instance={instance} isOpen={isOpenQr} onOpenChange={setIsOpenQR} />
+        <DialogQR instance={instance} isOpen={isOpenQr}  qrcode={qrcode} onOpenChange={setIsOpenQR} />
         <Toaster  richColors />
         <Card className={cn("w-[380px]", className)} {...props}>
         <CardHeader>
             <CardTitle>Instância de Whatsapp</CardTitle>
             <CardDescription>Nome: <span className='uppercase'>{instance.name}</span></CardDescription>
-            <Button className='bg-orange-600 hover:bg-orange-400 text-white uppercase' onClick={handleGenerateQr}>
+            {   instance.status != 'open' &&  (<Button  className='bg-orange-600 hover:bg-orange-400 text-white uppercase' onClick={handleGenerateQr}>
                 Gerar QR  
-            </Button>
+            </Button>)}
+
+            
         </CardHeader>
         <CardFooter className='flex justify-between'>
             <ButtonStatus instance={instance} />

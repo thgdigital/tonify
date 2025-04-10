@@ -4,7 +4,6 @@ import DashBoardPage, { DashBoardPageHeader, DashBoardPageHeaderTitle, DashBoard
 import { useEffect } from "react"
 import {getSocket} from "@/lib/socket"
 export default function Page() {
-  //const { socket } = useSocketContext()
   return (
     <DashBoardPage>
       <DashBoardPageHeader>

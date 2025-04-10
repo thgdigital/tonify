@@ -1,63 +1,57 @@
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { Instance } from '../../instance.interface';
-import ExternalService  from "@/features/instance/services/external.service";
-import { api } from "@/igniter.client";
-import { useState, useEffect } from "react";
+'use client'
 
+import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import type { Instance } from '../../instance.interface';
+import { api } from "@/igniter.client";
 
 interface DialogQRInstanceProps extends React.ComponentProps<"div"> {
-    instance: Instance;
-    isOpen: boolean;
-    onOpenChange: (open: boolean) => void;
+  instance: Instance;
+  isOpen: boolean;
+  qrcode: string | null;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function DialogQR({ className, instance, ...props }: DialogQRInstanceProps) {
+export function DialogQR({ instance, isOpen, onOpenChange, qrcode }: DialogQRInstanceProps) {
+  const [qrCodeData, setQrCodeData] = useState<string | null>(null);
 
-    const [qrCodeData, setQrCodeData] = useState<string | null>(null);
+  // ✅ Se já estiver conectado, não renderiza NADA
+  if (instance.status?.toLowerCase().trim() === "open") return null;
 
-    useEffect(() => {
-        async function fetchQrCode() {
-            try {
-                const result = await api.instance.qrCode.mutate({
-                    body: {
-                        name: instance.instanceId || "",
-                    }
-                });
+  useEffect(() => {
+    async function fetchQrCode() {
+      try {
+        const result = await api.instance.qrCode.mutate({
+          body: { name: instance.instanceId || "" }
+        });
+        setQrCodeData(result.data.base64);
+      } catch (error) {
+        console.error("❌ Erro ao buscar QR Code", error);
+      }
+    }
 
-                console.log("QR Code", result.data);
-                setQrCodeData(result.data.base64);
-            } catch (error) {
-                console.error("Erro ao buscar QR Code", error);
-            }
-        }
-        
-        if(props.isOpen) {
-            fetchQrCode();
-        }
-        
-    }, [props.isOpen, instance.instanceId]);
+    if (isOpen) fetchQrCode();
 
-    return (
-        <Dialog open={props.isOpen} onOpenChange={props.onOpenChange}>
-            <DialogContent>
-                <DialogHeader>
-                <DialogTitle>Scaneie o QR Code com o WhatsApp</DialogTitle>
-                <DialogDescription>
-                    {qrCodeData ? <img src={qrCodeData} alt="QR Code" /> : "Carregando..."}
-                </DialogDescription>
-                </DialogHeader>
-            </DialogContent>
-        </Dialog>
-    );
+    if(qrcode) {
+      setQrCodeData(qrcode);
+    }
+
+  }, [isOpen, instance.instanceId, qrcode]);
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Scaneie o QR Code com o WhatsApp</DialogTitle>
+          <DialogDescription>
+            {qrCodeData ? (
+              <img src={qrCodeData} alt="QR Code" />
+            ) : (
+              "Carregando..."
+            )}
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
 }

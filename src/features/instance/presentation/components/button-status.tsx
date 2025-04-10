@@ -12,34 +12,36 @@ interface CardInstanceProps extends React.ComponentProps<"div"> {
 
 export function ButtonStatus({ className, instance, ...props }: CardInstanceProps) {
 
-
+console.log("🚀 ~ file: button-status.tsx:10 ~ ButtonStatus ~ instance:", instance)
 
     switch (instance.status) {
         case "connecting":
             return (
-                <Badge className='bg-orange-600 text-white'>
+                <Badge className='bg-yellow-600 text-white'>
                     Conectando  
                 </Badge>
             )
         case "created":
             return (
-                <Badge className='bg-primary-600  text-white'>
+                <Badge className='bg-yellow-600  text-white'>
                     Criado  
                 </Badge>
         )
         case "open":
             return (
-                <Badge className='bg-primary-600  text-white'>
-                    Aberto  
+                <Badge className='bg-green-600  text-white'>
+                    Connectado  
                 </Badge>
         
         )
         case "close":
+        case "DISCONNECTED":
             return (
                 <Badge className='bg-red-600 text-white'>
                     Desligado  
                 </Badge>
         )
+        
     }
 
     return (

@@ -5,26 +5,18 @@ export function setupSocketServer(io: IOServer) {
   io.on("connection", async (socket: Socket) => {
     console.log("🟢 Cliente conectado");
 
-    // 🔐 Valida sessão ou token
-    const token = socket.handshake.auth?.token;
-    // const session = await verifyToken(token);
+      socket.on("join", ({ room }) => {
+        socket.join(room);
+        console.log(`✅ Cliente entrou na sala ${room}`);
+      });
+    
+      socket.on("leave", ({ room }) => {
+        socket.leave(room);
+        console.log(`👋 Cliente saiu da sala ${room}`);
+      });
 
-    // if (!session || !session.user?.id) {
-    //   console.warn("❌ Conexão rejeitada: não autenticado");
-    //   socket.disconnect();
-    //   return;
-    // }
-
-    // const userId = session.user.id;
-
-    // Cliente envia o ID da instância que quer escutar
-    socket.on("join_instance", (instanceId: string) => {
-      console.log(`👤 Usuário  entrou na sala da instância ${instanceId}`);
-      socket.join(instanceId);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("🔴 Cliente desconectado");
-    });
+      socket.on("disconnect", () => {
+        console.log("🔴 Cliente desconectado");
+      });
   });
 }

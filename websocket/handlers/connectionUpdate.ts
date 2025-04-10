@@ -17,7 +17,7 @@ export async function handleConnectionUpdate(
  
     const clientStatus = mapBackendStatusToClient(event.data.state);
 
-    emitClientStatus(server, event.instance, clientStatus, event.data.state,  event.data.statusReason);
+    emitClientStatus(server, event.instance, clientStatus, event.data.state);
    
 } else {
       console.warn(`[${event.instance}] ❗ Falha ao atualizar conexão: ${response.error}`);
@@ -47,15 +47,15 @@ function mapBackendStatusToClient(state: string): string {
     instance: string,
     clientStatus: string,
     backendStatus: string,
-    reason: number
+    
   ) {
     
     console.log(`[${instance}] 📤 Emitindo status para client: ${clientStatus}`);
   
     io.to(instance).emit("client:connection_status", {
       instance,
-      status: clientStatus,
       backendStatus,
-      reason,
+      clientStatus,
     });
   }
+  

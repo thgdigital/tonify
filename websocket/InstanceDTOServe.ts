@@ -25,6 +25,14 @@ export interface ConnectionUpdateData {
 
 export interface LogoutInstanceData {}
 export interface RemoveInstanceData {}
+export interface QrcodeUpdatedData {
+  qrcode:{
+    instance: string,
+    pairingCode: null
+    code: string
+    base64: string
+  }
+}
 
 type EventHandler<T> = (
   payload: WebSocketPayload<T>,

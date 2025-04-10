@@ -3,11 +3,13 @@ import { Server as IOServer } from "socket.io";
 import { handleConnectionUpdate } from "./connectionUpdate";
 import { handleLogoutInstance } from "./logoutInstance";
 import { handleRemoveInstance } from "./removeInstance";
+import { handleMessagesUpsert } from "./messagesUpsert";
 import { InstanceDTOServe,
      WebSocketPayload,
      ConnectionUpdateData,
      LogoutInstanceData,
-     RemoveInstanceData
+     RemoveInstanceData,
+     QrcodeUpdatedData
  } from "./../InstanceDTOServe";
 
 export function registerSocketHandlers(
@@ -28,7 +30,12 @@ export function registerSocketHandlers(
   });
   
     socket.on("messages.upsert", async (event: WebSocketPayload<any>) => {
-      handleRemoveInstance(event, server, instanceService)
+      handleMessagesUpsert(event, server)
+  });
+
+  socket.on("qrcode.updated", async (event: WebSocketPayload<QrcodeUpdatedData>) => {
+    console.log("🚀 Novo evento de QR Code recebido:", event);
+    server.to(event.instance).emit(`qrcode.updated:${event.instance}`, event.data.qrcode);
   });
   
     socket.on("ping", () => {
