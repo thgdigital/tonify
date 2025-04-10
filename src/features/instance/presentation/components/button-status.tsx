@@ -8,11 +8,7 @@ interface CardInstanceProps extends React.ComponentProps<"div"> {
     instance: Instance;
 }
 
-
-
 export function ButtonStatus({ className, instance, ...props }: CardInstanceProps) {
-
-console.log("🚀 ~ file: button-status.tsx:10 ~ ButtonStatus ~ instance:", instance)
 
     switch (instance.status) {
         case "connecting":
