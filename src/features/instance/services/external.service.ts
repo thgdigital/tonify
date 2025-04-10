@@ -1,4 +1,5 @@
 import { api } from "@/igniter.client";
+import { PrismaClient } from "@prisma/client";
 
 class ExternalService {
   private baseUrl: string;
@@ -17,6 +18,7 @@ class ExternalService {
 
   public async createInstance(data: any): Promise<any> {
     this.validateConfig();
+    console.log(`Base URL: ${this.baseUrl}`);
     const response = await fetch(`${this.baseUrl}/instance/create`, {
       method: 'POST',
       headers: {
@@ -28,7 +30,7 @@ class ExternalService {
 
     if (!response.ok) {
       console.error('Error making external request:', response.statusText);
-      throw new Error('Failed to create instance');
+      return await response.json();
     }
 
     return await response.json();

@@ -3,11 +3,17 @@ import type { Instance } from '../../instance.interface';
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
 
+
 interface CardInstanceProps extends React.ComponentProps<"div"> {
     instance: Instance;
 }
 
+
+
 export function ButtonStatus({ className, instance, ...props }: CardInstanceProps) {
+
+
+
     switch (instance.status) {
         case "connecting":
             return (

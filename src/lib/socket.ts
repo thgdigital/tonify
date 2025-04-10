@@ -1,22 +1,3 @@
-// // src/lib/socket.ts
-// 'use client'
-
-// import { io, Socket } from 'socket.io-client';
-
-// let socket: Socket | null = null;
-
-// export const getSocket = (): Socket => {
-//   if (!socket && typeof window !== 'undefined') {
-//     socket = io({
-//       path: "/api/socket",
-//       transports: ["websocket"]
-//     });
-//   }
-//   return socket!;
-//};
-
-// src/lib/socket.ts
-// src/lib/socket.ts
 'use client';
 
 import { io, Socket } from 'socket.io-client';

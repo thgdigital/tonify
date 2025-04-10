@@ -36,16 +36,11 @@ interface CardInstanceProps extends React.ComponentProps<"div"> {
   instance: Instance;
 }
 
-
-
-
-
 export function CardInstance({ className, instance, ...props }: CardInstanceProps) {
     const queryClient = useQueryClient()
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenQr, setIsOpenQR] = useState(false);
 
-//    const useClientSocket =  useSocket()
 
 //    useClientSocket?.on('messages.upsert', (event: Event) => {
 //     console.log(event)

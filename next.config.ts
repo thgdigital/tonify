@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   webpack: (config) => {
     
-    config.externals = [...(config.externals || [])];
+    config.externals = [...(config.externals || [] )];
     return config;
   },
 };

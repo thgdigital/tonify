@@ -69,16 +69,17 @@ export const InstanceController = igniter.controller({
             instanceName: instanceName,
             qrcode: true,
             integration: "WHATSAPP-BAILEYS",
-            webhook: {
-              "url": "https://paineln8n.faixinhabot.cloud/webhook-test/c638b1e4-69f9-40a9-a1e3-6d86750fbdb3",
-              "byEvents": false,
-              "base64": true,
-              "events": ["MESSAGES_UPSERT"],
-            },
+            // webhook: {
+            //   "url": "https://paineln8n.faixinhabot.cloud/webhook-test/c638b1e4-69f9-40a9-a1e3-6d86750fbdb3",
+            //   "byEvents": false,
+            //   "base64": true,
+            //   "events": ["MESSAGES_UPSERT"],
+            // },
             websocket: { 
               "byEvents": false,
               "base64": true,
               "events": [
+                "APPLICATION_STARTUP",
                 "QRCODE_UPDATED",
                 "REMOVE_INSTANCE",
                 "CONNECTION_UPDATE",

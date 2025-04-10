@@ -17,7 +17,6 @@ export default function Page() {
   const { data: instances } = api.instance.getUserId.useQuery();
 
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting')
-  const [messages, setMessages] = useState<string[]>([])
   useEffect(() => {
     const socket = getSocket()
       socket.on("connect", () => {
