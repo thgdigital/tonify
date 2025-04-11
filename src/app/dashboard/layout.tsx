@@ -9,7 +9,7 @@ export default async function Layout({
 }) {
 const session = await api.auth.getSession.query()
 
-if(session.error) return  redirect('/auth')
+if(session.error) return redirect('/auth')
 
   return (
     <div className="min-h grid grid-cols-[16rem_1fr]">
