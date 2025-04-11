@@ -42,7 +42,7 @@ export function AuthForm({className, ...props}: React.ComponentProps<"div">){
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-           <Toaster richColors />
+        <Toaster richColors position="top-center"/>
         <Card className="overflow-hidden">
           <CardContent className="grid p-0 md:grid-cols-1">
             <form className="p-6 md:p-8" onSubmit={form.onSubmit}>
