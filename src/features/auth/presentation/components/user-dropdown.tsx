@@ -20,10 +20,22 @@ import {
   import {ExitIcon } from '@radix-ui/react-icons'
 import UserInfo from "./user-info"
 import { useState, useEffect } from "react"
+import { api } from "@/igniter.client";
+import { redirect } from "next/navigation"
   
 export function UserDropdown() {
   // Estado para controlar se estamos no cliente
   const [isClient, setIsClient] = useState(false);
+  const auth = api.auth.signOut.useMutation({
+    onRequest(request) {
+      redirect('/auth')
+    },
+  });
+
+  // Renderização no cliente (com interatividade)
+    function handleLogout() {
+      auth.mutate();
+    }  
   
   // Efeito para marcar quando estamos no cliente
   useEffect(() => {
@@ -63,7 +75,7 @@ export function UserDropdown() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
         <ExitIcon className="w-3 h-3 mr-3"/>
           Sair
         </DropdownMenuItem>

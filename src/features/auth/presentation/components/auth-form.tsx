@@ -13,30 +13,39 @@ import { Toaster, toast } from 'sonner'
 
 export function AuthForm({className, ...props}: React.ComponentProps<"div">){
 
+  const auth = api.auth.signIn.useMutation({
+    onRequest(request) {
+      if(request?.data?.status === true) {
+        toast.success("Verifique seu e-mail para o link de login", {
+            duration: 5000,
+            description: "Um link de login foi enviado para o seu e-mail. Clique no link para fazer login na sua conta.",
+        })
+        form.reset();
+      }else {
+          toast.error("Erro ao fazer login", {
+              duration: 5000,
+              description: "Ocorreu um erro ao tentar fazer login. Verifique seu e-mail e tente novamente.",})
+      }
+    },
+
+  });
+
     const form = useFormWithZod({
         schema: z.object({  
             email: z.string().email()
         }),
         onSubmit: async (data) => {
-            const response = await api.auth.signIn.mutate({
+            await auth.mutate({
                 body: {
                     email: data.email
                 }
             });
 
-            if(response.data?.status === true) {
-              toast.success("Verifique seu e-mail para o link de login", {
-                  duration: 5000,
-                  description: "Um link de login foi enviado para o seu e-mail. Clique no link para fazer login na sua conta.",
-              })
-              form.reset();
-            }else {
-                toast.error("Erro ao fazer login", {
-                    duration: 5000,
-                    description: "Ocorreu um erro ao tentar fazer login. Verifique seu e-mail e tente novamente.",})
-            }
+       
+
+            
    
-            console.log("Sign-in successful:", response.data);
+            console.log("Sign-in successful:", auth.data);
         }
     });
 
@@ -65,7 +74,7 @@ export function AuthForm({className, ...props}: React.ComponentProps<"div">){
                 </div>
                 
                 <Button type="submit" className="w-full">
-                  Login
+                {auth.loading ? "Gerando Link..." : "Login"} 
                 </Button>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
