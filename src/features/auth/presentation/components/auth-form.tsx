@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Toaster, toast } from 'sonner'
 
 export function AuthForm({className, ...props}: React.ComponentProps<"div">){
 
@@ -17,20 +18,31 @@ export function AuthForm({className, ...props}: React.ComponentProps<"div">){
             email: z.string().email()
         }),
         onSubmit: async (data) => {
-            console.log("Form submitted with data: ", data);
             const response = await api.auth.signIn.mutate({
                 body: {
                     email: data.email
                 }
             });
-            
+
+            if(response.data?.status === true) {
+              toast.success("Verifique seu e-mail para o link de login", {
+                  duration: 5000,
+                  description: "Um link de login foi enviado para o seu e-mail. Clique no link para fazer login na sua conta.",
+              })
+              form.reset();
+            }else {
+                toast.error("Erro ao fazer login", {
+                    duration: 5000,
+                    description: "Ocorreu um erro ao tentar fazer login. Verifique seu e-mail e tente novamente.",})
+            }
+   
             console.log("Sign-in successful:", response.data);
         }
     });
 
     return (
- 
         <div className={cn("flex flex-col gap-6", className)} {...props}>
+           <Toaster richColors />
         <Card className="overflow-hidden">
           <CardContent className="grid p-0 md:grid-cols-1">
             <form className="p-6 md:p-8" onSubmit={form.onSubmit}>

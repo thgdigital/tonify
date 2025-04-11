@@ -17,7 +17,6 @@ export const AuthController = igniter.controller({
       }),
       handler: async ({ request, response, context }) => {
       const result = await context.auth.signIn(request.body.email);
-      
       return response.success(result);
       }
     }),
