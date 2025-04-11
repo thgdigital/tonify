@@ -75,7 +75,7 @@ export function UserDropdown() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
+        <DropdownMenuItem onClick={handleLogout} disabled={auth.loading}>
         <ExitIcon className="w-3 h-3 mr-3"/>
           Sair
         </DropdownMenuItem>
