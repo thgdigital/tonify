@@ -15,11 +15,12 @@ export const auth = betterAuth({
     appName: "Tonify",
     plugins: [
         magicLink({
-            async sendMagicLink({ email, url }) {
+            async sendMagicLink({ email, url, }) {
               await sendMagicLinkEmail(email, url);
               console.log("✅ Magic link enviado para:", email);
             },
-          }),
+          },
+        ),
         emailOTP({
             async sendVerificationOTP({ email, otp, type }, request) {
                 // Send email with OTP
