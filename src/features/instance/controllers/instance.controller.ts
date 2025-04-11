@@ -48,7 +48,7 @@ export const InstanceController = igniter.controller({
       use: [InstanceFeatureProcedure(), AuthFeatureProcedure()],
       body: z.object({
         id: z.string().optional().nullable(),
-        name: z.string(),
+        name: z.string().regex(/^[a-zA-Z0-9-_ ]+$/, "Use apenas letras, números, espaços, hífen (-) ou underline (_)"),
         createdAt: z.date().optional().nullable(),
       }),
       handler: async ({ request, response, context }) => {

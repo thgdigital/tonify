@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import { emailOTP, magicLink } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { betterAuth } from "better-auth";
+import { sendMagicLinkEmail } from "@/lib/mail/sendMagicLink"
+
 
 const client = new PrismaClient();
 
@@ -13,14 +15,11 @@ export const auth = betterAuth({
     appName: "Tonify",
     plugins: [
         magicLink({
-            sendMagicLink({ email, token, url }, request) {
-                // Send email with magic link
-
-                console.log("Sending magic link to email:", email);
-                console.log("Magic link token:", token);
-                console.log("Magic link URL:", url);
+            async sendMagicLink({ email, url }) {
+              await sendMagicLinkEmail(email, url);
+              console.log("✅ Magic link enviado para:", email);
             },
-        }),
+          }),
         emailOTP({
             async sendVerificationOTP({ email, otp, type }, request) {
                 // Send email with OTP

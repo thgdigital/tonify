@@ -1,0 +1,7 @@
+🔐 Acesse sua conta
+
+Clique no link abaixo para acessar sua conta:
+
+{{magicLink}}
+
+Esse link expira em 15 minutos. Se você não solicitou, ignore esta mensagem.
